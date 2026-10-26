@@ -11,9 +11,10 @@ pipeline {
         REMOTE_USER = 'root'
         REMOTE_HOST = '192.168.9.228' // 远程服务器 IP
         REMOTE_PATH = '/opt/app/ruoyi-admin'
-        JAR_NAME = 'ruoyi-admin.jar' // 你的 Jar 包名称
+        JAR_PATH = 'ruoyi-admin-wms/target/ruoyi-admin.jar' //你的 Jar 包所在位置
         // 在 Jenkins 中创建的 SSH 凭据 ID
         SSH_CRED_ID = 'jenkins_ssh'
+        SCRIPT_COMMAND = 'bash ry.sh restart'
     }
 
     stages {
@@ -41,7 +42,7 @@ pipeline {
                     // 2. 上传 JAR 包（假设在 target 目录下）
                     sh """
                         scp -o StrictHostKeyChecking=no \
-                        ruoyi-admin-wms/target/${JAR_NAME} \
+                        ${JAR_PATH} \
                         ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}/
                     """
 
@@ -49,7 +50,7 @@ pipeline {
                     sh """
                         ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} << 'EOF'
                             cd ${REMOTE_PATH}
-                            ./ry.sh
+                            ${SCRIPT_COMMAND}
                             echo "Deployment complete."
                         EOF
                     """
