@@ -41,7 +41,7 @@ pipeline {
                     // 2. 上传 JAR 包（假设在 target 目录下）
                     sh """
                         scp -o StrictHostKeyChecking=no \
-                        target/${JAR_NAME} \
+                        ruoyi-admin-wms/target/${JAR_NAME} \
                         ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}/
                     """
 
